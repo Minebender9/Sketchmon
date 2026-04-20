@@ -211,6 +211,10 @@ socket.on("clearCanvas", () => {
   setTimeout(() => (canvas.style.transform = "scale(1)"), 80);
 });
 
+socket.on("yourTurn", () => {
+  showToast("Choose a Pokémon to draw!");
+});
+
 /* ---------------- GAME ---------------- */
 
 /* ROUND START = SINGLE SOURCE OF TRUTH FOR ROLE UI */

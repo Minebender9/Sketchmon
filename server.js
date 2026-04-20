@@ -90,12 +90,13 @@ function emitScoreboard() {
 /* ---------------- POKEMON SYSTEM ---------------- */
 
 async function startNewPokemon(drawerId) {
+  game.waitingForChoice = true;
+
   const candidates = getRandomPokemons(3);
   const details = await getPokemonDetails(candidates);
 
-  game.waitingForChoice = true;
-
   io.to(drawerId).emit("choosePokemon", details);
+  io.to(drawerId).emit("yourTurn");
 
   // guessers clear visual state
   io.emit("clearCanvas");
@@ -112,15 +113,27 @@ function startRound() {
 
   game.currentPokemon = null;
   game.roundTimeLeft = 120;
+  game.waitingForChoice = true;
 
   io.emit("roundStart", { drawer: drawerId });
   io.emit("timer", game.roundTimeLeft);
+
+  clearInterval(game.roundTimer);
+  game.roundTimer = setInterval(() => {
+    game.roundTimeLeft--;
+    io.emit("timer", game.roundTimeLeft);
+
+    if (game.roundTimeLeft <= 0) {
+      endRound();
+    }
+  }, 1000);
 
   startNewPokemon(drawerId);
 }
 
 function endRound() {
   clearInterval(game.roundTimer);
+  game.waitingForChoice = false;
 
   io.emit("roundEnd");
 
@@ -219,19 +232,7 @@ io.on("connection", (socket) => {
     game.currentPokemon = chosenName;
     game.waitingForChoice = false;
 
-    // Start the timer now
-    clearInterval(game.roundTimer);
-    game.roundTimer = setInterval(() => {
-      game.roundTimeLeft--;
-
-      io.emit("timer", game.roundTimeLeft);
-
-      if (game.roundTimeLeft <= 0) {
-        endRound();
-      }
-    }, 1000);
-
-    // Show to drawer
+    // Show the chosen Pokémon to the drawer
     io.to(drawerId).emit("yourPokemon", game.currentPokemon);
   });
 
