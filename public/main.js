@@ -73,6 +73,11 @@ function setRole(text, type = "") {
   role.className = type;
 }
 
+function capitalizePokemon(name) {
+  if (!name || typeof name !== "string") return name;
+  return name.charAt(0).toUpperCase() + name.slice(1);
+}
+
 /* ---------------- CHOOSE POKEMON ---------------- */
 
 socket.on("choosePokemon", (options) => {
@@ -334,7 +339,7 @@ socket.on("roundStart", ({ drawer }) => {
 /* ONLY DRAWER sees Pokémon */
 socket.on("yourPokemon", (name) => {
   const pokemon = document.getElementById("pokemon");
-  pokemon.innerText = name;
+  pokemon.innerText = capitalizePokemon(name);
 
   pokemon.style.transform = "scale(1.05)";
   setTimeout(() => (pokemon.style.transform = "scale(1)"), 120);
@@ -356,8 +361,9 @@ socket.on("timer", (t) => {
 
 /* REVEAL POKEMON */
 socket.on("revealPokemon", (name) => {
-  document.getElementById("pokemon").innerText = name;
-  showToast(`Time's up! The Pokémon was ${name}`);
+  const pokemonName = capitalizePokemon(name);
+  document.getElementById("pokemon").innerText = pokemonName;
+  showToast(`Time's up! The Pokémon was ${pokemonName}`);
 
   setTimeout(() => {
     document.getElementById("pokemon").innerText = "";
@@ -378,10 +384,11 @@ socket.on("roundEnd", () => {
 /* CORRECT GUESS */
 socket.on("correctGuess", ({ playerId, name, pokemon }) => {
   console.log("Correct guess by:", playerId);
-  showToast(`🎉 ${name} guessed ${pokemon}!`);
+  const pokemonName = capitalizePokemon(pokemon);
+  showToast(`🎉 ${name} guessed ${pokemonName}!`);
 
   // Reveal the Pokémon to everyone
-  document.getElementById("pokemon").innerText = pokemon;
+  document.getElementById("pokemon").innerText = pokemonName;
 
   // Clear after 3 seconds
   setTimeout(() => {
