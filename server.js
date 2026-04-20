@@ -136,6 +136,9 @@ function endRound() {
   clearInterval(game.roundTimer);
   game.waitingForChoice = false;
 
+  // Reveal the Pokémon if not guessed
+  io.emit("revealPokemon", game.currentPokemon);
+
   io.emit("roundEnd");
 
   game.currentDrawerIndex =

@@ -354,6 +354,16 @@ socket.on("timer", (t) => {
   }
 });
 
+/* REVEAL POKEMON */
+socket.on("revealPokemon", (name) => {
+  document.getElementById("pokemon").innerText = name;
+  showToast(`Time's up! The Pokémon was ${name}`);
+
+  setTimeout(() => {
+    document.getElementById("pokemon").innerText = "";
+  }, 3000);
+});
+
 /* ROUND END */
 socket.on("roundEnd", () => {
   isDrawer = false;
