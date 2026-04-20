@@ -307,17 +307,23 @@ canvas {
 ========================= */
 
 #choosePokemon {
-  position: fixed;
-  top: 0;
-  left: 0;
-  right: 0;
-  bottom: 0;
-  background: black;
-  display: none;
-  align-items: center;
-  justify-content: center;
-  z-index: 2147483647;
-  pointer-events: auto;
+  position: fixed !important;
+  top: 0 !important;
+  left: 0 !important;
+  right: 0 !important;
+  bottom: 0 !important;
+  width: 100% !important;
+  height: 100% !important;
+  background: rgba(0, 0, 0, 0.95) !important;
+  display: none !important;
+  align-items: center !important;
+  justify-content: center !important;
+  z-index: 999999999 !important;
+  pointer-events: auto !important;
+}
+
+#choosePokemon.visible {
+  display: flex !important;
 }
 
 .chooseBox {
