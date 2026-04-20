@@ -11,8 +11,7 @@ body {
   margin: 0;
   background: radial-gradient(circle at top, #1c1f2a, #0f1117);
   color: white;
-  user-select: none;
-  overflow: hidden;
+  /* overflow: hidden; */
 }
 
 /* =========================
@@ -313,15 +312,12 @@ canvas {
   left: 0;
   right: 0;
   bottom: 0;
-  background: rgba(0,0,0,0.85);
+  background: black;
   display: none;
   align-items: center;
   justify-content: center;
   z-index: 2147483647;
   pointer-events: auto;
-}
-#choosePokemon.visible {
-  display: flex;
 }
 
 .chooseBox {
@@ -330,6 +326,7 @@ canvas {
   border-radius: 14px;
   text-align: center;
   width: 400px;
+  border: 2px solid white;
 }
 
 .chooseBox h1 {

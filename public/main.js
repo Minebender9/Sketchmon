@@ -94,15 +94,19 @@ socket.on("choosePokemon", (options) => {
     div.appendChild(p);
 
     div.onclick = () => {
+      console.log("Selecting Pokemon", option.name);
       socket.emit("selectPokemon", option.name);
-      overlay.classList.remove("visible");
+      overlay.style.display = "none";
     };
 
     optionsDiv.appendChild(div);
   });
 
-  overlay.classList.add("visible");
-  overlay.style.zIndex = "2147483647";
+  setTimeout(() => {
+    overlay.style.display = "flex";
+    overlay.style.zIndex = "2147483647";
+    console.log("Overlay displayed");
+  }, 100);
 });
 
 /* ---------------- DRAWING ---------------- */
