@@ -53,6 +53,12 @@ joinBtn.onclick = () => {
   showToast("Welcome " + playerName + "!");
 };
 
+document.getElementById("nameInput").addEventListener("keydown", (e) => {
+  if (e.key === "Enter") {
+    joinBtn.click();
+  }
+});
+
 /* ---------------- CONTROLS ---------------- */
 
 const colorPicker = document.getElementById("colorPicker");
@@ -310,6 +316,18 @@ socket.on("roundStart", ({ drawer }) => {
   showToast("New round started!");
   document.getElementById("pokemon").innerText = "";
 
+  // Show/hide UI based on role
+  const tools = document.getElementById("tools");
+  const guessBox = document.getElementById("guessBox");
+
+  if (isDrawer) {
+    tools.style.display = "flex";
+    guessBox.style.display = "none";
+  } else {
+    tools.style.display = "none";
+    guessBox.style.display = "block";
+  }
+
   if (skipBtn) skipBtn.style.display = isDrawer ? "block" : "none";
 });
 
@@ -355,6 +373,11 @@ socket.on("correctGuess", ({ playerId, name, pokemon }) => {
   // Reveal the Pokémon to everyone
   document.getElementById("pokemon").innerText = pokemon;
 
+  // Clear after 3 seconds
+  setTimeout(() => {
+    document.getElementById("pokemon").innerText = "";
+  }, 3000);
+
   // DO NOT overwrite role text (fixes your bug)
   // instead just flash effect
   const role = document.getElementById("role");
@@ -384,7 +407,7 @@ socket.on("scoreboardUpdate", (players) => {
 /* ---------------- INPUT ---------------- */
 
 document.getElementById("guessBox").addEventListener("keydown", (e) => {
-  if (e.key === "Enter") {
+  if (e.key === "Enter" && !isDrawer) {
     socket.emit("guess", e.target.value);
     e.target.value = "";
   }
