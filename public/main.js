@@ -153,14 +153,14 @@ socket.on("choosePokemon", (options) => {
     div.onclick = () => {
       console.log("Selecting Pokemon", option.name);
       socket.emit("selectPokemon", option.name);
-      overlay.style.display = "none !important";
+      overlay.classList.remove("show");
     };
 
     optionsDiv.appendChild(div);
   });
 
   setTimeout(() => {
-  overlay.style.display = "flex !important";
+  overlay.classList.add("show");
   console.log("Overlay displayed");
   }, 500);
 });

@@ -322,7 +322,7 @@ canvas {
   pointer-events: auto !important;
 }
 
-#choosePokemon.visible {
+#choosePokemon.show {
   display: flex !important;
 }
 
