@@ -369,20 +369,20 @@ canvas {
 
 .quickColors {
   display: flex;
-  gap: 6px;
+  gap: 8px;
   align-items: center;
 
   flex-wrap: wrap;     /* IMPORTANT */
-  max-width: 120px;    /* prevents overflow in Discord */
+  max-width: 180px;    /* prevents overflow in Discord */
 }
 
 .colorSwatch {
-  width: 18px;
-  height: 18px;
-  border-radius: 4px;
+  width: 24px;
+  height: 24px;
+  border-radius: 6px;
   cursor: pointer;
   border: 2px solid rgba(255,255,255,0.2);
-  transition: transform 0.1s ease;
+  transition: transform 0.1s ease, box-shadow 0.1s ease;
 }
 
 .colorSwatch:hover {
