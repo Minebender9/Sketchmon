@@ -74,42 +74,6 @@ async function getPokemonDetails(names) {
   return details;
 }
 
-function getRandomPokemon() {
-  return pokemonList[Math.floor(Math.random() * pokemonList.length)];
-}
-
-/* ---------------- OAUTH ---------------- */
-
-app.post("/api/token", async (req, res) => {
-  const { code } = req.body;
-
-  try {
-    const response = await fetch("https://discord.com/api/oauth2/token", {
-      method: "POST",
-      headers: { "Content-Type": "application/x-www-form-urlencoded" },
-      body: new URLSearchParams({
-        client_id: process.env.CLIENT_ID,
-        client_secret: process.env.CLIENT_SECRET,
-        grant_type: "authorization_code",
-        code,
-        redirect_uri: process.env.REDIRECT_URI
-      })
-    });
-
-    const data = await response.json();
-    res.json(data);
-  } catch (err) {
-    console.error(err);
-    res.status(500).json({ error: "OAuth failed" });
-  }
-});
-
-/* ---------------- HELPERS ---------------- */
-
-function getRandomPokemon() {
-  return pokemonList[Math.floor(Math.random() * pokemonList.length)];
-}
-
 function emitScoreboard() {
   io.emit("scoreboardUpdate", game.players);
 }
