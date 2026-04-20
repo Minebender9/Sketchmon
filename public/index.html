@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Sketchmon</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+
+<div class="gameLayout">
+
+  <!-- CENTER AREA -->
+  <div class="canvasWrap">
+
+    <!-- TOP HUD -->
+    <div class="topbar">
+      <h2 id="role">Loading...</h2>
+      <h3 id="timer"></h3>
+    </div>
+
+    <!-- Pokémon (drawer only) -->
+    <h3 id="pokemon"></h3>
+
+    <!-- CANVAS -->
+    <canvas id="canvas"></canvas>
+
+    <!-- TOOLS (attached to canvas) -->
+<div class="tools">
+  <input type="color" id="colorPicker" />
+
+  <!-- QUICK COLORS -->
+  <div id="quickColors" class="quickColors">
+    <div class="colorSwatch" data-color="#000000" style="background:#000000"></div>
+    <div class="colorSwatch" data-color="#ffffff" style="background:#ffffff; border:1px solid #ccc"></div>
+    <div class="colorSwatch" data-color="#ff0000" style="background:#ff0000"></div>
+    <div class="colorSwatch" data-color="#00ff00" style="background:#00ff00"></div>
+    <div class="colorSwatch" data-color="#0000ff" style="background:#0000ff"></div>
+    <div class="colorSwatch" data-color="#ffff00" style="background:#ffff00"></div>
+    <div class="colorSwatch" data-color="#ff00ff" style="background:#ff00ff"></div>
+    <div class="colorSwatch" data-color="#00ffff" style="background:#00ffff"></div>
+  </div>
+
+  <input type="range" id="brushSize" min="1" max="20" value="3" />
+  <button id="eraserBtn">Eraser</button>
+  <button id="clearBtn">Clear</button>
+</div>
+    <!-- SKIP -->
+    <button id="skipBtn" style="display:none;">Skip</button>
+
+  </div>
+
+  <!-- RIGHT PANEL -->
+  <div class="rightHud">
+
+    <!-- SCOREBOARD (TOP) -->
+    <div id="scoreboard"></div>
+
+    <!-- GUESS AREA (BOTTOM) -->
+    <div class="controls">
+      <input id="guessBox" placeholder="Guess Pokémon..." />
+      <button id="startBtn">Start</button>
+    </div>
+
+  </div>
+
+</div>
+<!-- TOAST CONTAINER -->
+<div id="toastContainer"></div>
+
+<!-- NAME LOBBY OVERLAY -->
+<div id="lobby">
+  <div class="lobbyBox">
+    <h1>Sketchmon</h1>
+    <p>Enter your name to join</p>
+
+    <input id="nameInput" placeholder="Your name..." maxlength="16" />
+    <button id="joinBtn">Join Game</button>
+  </div>
+</div>
+<!-- SOCKET.IO -->
+<script src="/socket.io/socket.io.js"></script>
+<script src="main.js"></script>
+<script src="https://unpkg.com/@discord/embedded-app-sdk"></script>
+
+</body>
+</html>

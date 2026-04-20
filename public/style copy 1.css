@@ -1,0 +1,193 @@
+/* =========================
+   GLOBAL
+========================= */
+
+* {
+  box-sizing: border-box;
+  font-family: ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto;
+}
+
+body {
+  margin: 0;
+  background: radial-gradient(circle at top, #1c1f2a, #0f1117);
+  color: white;
+  user-select: none;
+}
+
+/* =========================
+   MAIN LAYOUT
+========================= */
+
+.gameLayout {
+  display: grid;
+  grid-template-columns: 1fr 260px;
+  height: 100vh;
+  padding: 12px;
+  gap: 12px;
+}
+
+/* =========================
+   CENTER AREA
+========================= */
+
+.canvasWrap {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 10px;
+  position: relative;
+  padding-top: 10px;
+}
+
+/* =========================
+   TOP TEXT (FIXED STACK ABOVE CANVAS)
+========================= */
+
+#role {
+  font-size: 34px;
+  font-weight: 900;
+  text-align: center;
+  margin-top: 10px;
+}
+
+#role.drawer {
+  color: #4ade80;
+}
+
+#role.guesser {
+  color: #60a5fa;
+}
+
+/* =========================
+   POKEMON (CENTERED, NO OVERLAP)
+========================= */
+
+#pokemon {
+  font-size: 32px;
+  font-weight: 900;
+  text-align: center;
+  margin-bottom: 5px;
+  min-height: 40px;
+}
+
+/* =========================
+   CANVAS (CENTERED PROPERLY)
+========================= */
+
+canvas {
+  width: 100%;
+  max-width: 1200px;
+  height: 75vh;
+
+  background: white;
+  border-radius: 14px;
+  box-shadow: 0 20px 80px rgba(0,0,0,0.6);
+
+  cursor: crosshair;
+}
+
+/* =========================
+   TOOLS (UNDER CANVAS, CENTERED)
+========================= */
+
+.tools {
+  display: flex;
+  gap: 10px;
+  align-items: center;
+  justify-content: center;
+
+  margin-top: 10px;
+}
+
+.tools button {
+  background: rgba(255,255,255,0.1);
+  border: none;
+  color: white;
+  padding: 8px 12px;
+  border-radius: 8px;
+  cursor: pointer;
+}
+
+.tools button:hover {
+  background: rgba(255,255,255,0.2);
+}
+
+/* =========================
+   RIGHT PANEL
+========================= */
+
+.rightHud {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+/* scoreboard */
+#scoreboard {
+  height: 50%;
+  overflow-y: auto;
+
+  background: rgba(255,255,255,0.04);
+  border-radius: 10px;
+  padding: 10px;
+}
+
+#scoreboard div {
+  display: flex;
+  justify-content: space-between;
+
+  padding: 6px 8px;
+  border-radius: 6px;
+
+  background: rgba(255,255,255,0.05);
+}
+
+/* =========================
+   GUESS AREA
+========================= */
+
+.controls {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+#guessBox {
+  width: 100%;
+  padding: 12px;
+
+  border-radius: 10px;
+  border: 1px solid rgba(255,255,255,0.1);
+
+  background: rgba(255,255,255,0.08);
+  color: white;
+}
+
+#guessBox:focus {
+  outline: none;
+  border: 1px solid rgba(96,165,250,0.6);
+}
+
+/* start button */
+#startBtn {
+  padding: 10px;
+  border-radius: 10px;
+}
+
+/* =========================
+   SKIP BUTTON
+========================= */
+
+#skipBtn {
+  position: absolute;
+  top: 10px;
+  right: 10px;
+
+  background: #ff4d4d;
+  color: white;
+
+  padding: 8px 12px;
+  border-radius: 10px;
+
+  display: none;
+}

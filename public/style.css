@@ -1,0 +1,330 @@
+/* =========================
+   GLOBAL
+========================= */
+
+* {
+  box-sizing: border-box;
+  font-family: ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto;
+}
+
+body {
+  margin: 0;
+  background: radial-gradient(circle at top, #1c1f2a, #0f1117);
+  color: white;
+  user-select: none;
+  overflow: hidden;
+}
+
+/* =========================
+   MAIN LAYOUT
+========================= */
+
+.gameLayout {
+  display: grid;
+  grid-template-columns: 1fr 260px;
+  height: 100vh;
+  padding: 12px;
+  gap: 12px;
+}
+
+/* =========================
+   CENTER AREA WRAPPER
+========================= */
+
+.canvasWrap {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: flex-start;
+  gap: 6px;
+  position: relative;
+  padding-top: 10px;
+}
+
+/* =========================
+   HEADER STACK (IMPORTANT FIX)
+   Everything ABOVE canvas is grouped visually
+========================= */
+
+#role {
+  font-size: 34px;
+  font-weight: 900;
+  text-align: center;
+  margin: 0;
+}
+
+#role.drawer {
+  color: #4ade80;
+}
+
+#role.guesser {
+  color: #60a5fa;
+}
+
+/* Pokémon text tightly grouped under role */
+#pokemon {
+  font-size: 30px;
+  font-weight: 800;
+  text-align: center;
+  margin: 0;
+  min-height: 36px;
+  opacity: 0.95;
+}
+
+/* Timer directly under Pokémon */
+#timer {
+  font-size: 22px;
+  font-weight: 700;
+  text-align: center;
+  margin: 0;
+  opacity: 0.9;
+}
+
+/* =========================
+   CANVAS (CENTERED + FIXED SIZE)
+========================= */
+
+canvas {
+  width: 100%;
+  max-width: 1200px;
+  height: 75vh;
+
+  background: white;
+  border-radius: 14px;
+  box-shadow: 0 20px 80px rgba(0,0,0,0.6);
+
+  cursor: crosshair;
+}
+
+/* =========================
+   TOOLS (CENTERED UNDER CANVAS)
+========================= */
+
+.tools {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+
+  flex-wrap: wrap;          /* IMPORTANT */
+  justify-content: center;
+
+  max-width: 100%;
+}
+
+.tools button {
+  background: rgba(255,255,255,0.1);
+  border: none;
+  color: white;
+  padding: 8px 12px;
+  border-radius: 8px;
+  cursor: pointer;
+}
+
+.tools button:hover {
+  background: rgba(255,255,255,0.2);
+}
+
+/* =========================
+   RIGHT PANEL
+========================= */
+
+.rightHud {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+/* =========================
+   SCOREBOARD (SMALL + CLEAN)
+========================= */
+
+#scoreboard {
+  height: 45%;
+  overflow-y: auto;
+
+  background: rgba(255,255,255,0.04);
+  border-radius: 10px;
+  padding: 10px;
+}
+
+#scoreboard div {
+  display: flex;
+  justify-content: space-between;
+
+  padding: 6px 8px;
+  border-radius: 6px;
+
+  background: rgba(255,255,255,0.05);
+}
+
+/* =========================
+   GUESS AREA (BELOW SCOREBOARD)
+========================= */
+
+.controls {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+#guessBox {
+  width: 100%;
+  padding: 12px;
+
+  border-radius: 10px;
+  border: 1px solid rgba(255,255,255,0.1);
+
+  background: rgba(255,255,255,0.08);
+  color: white;
+}
+
+#guessBox:focus {
+  outline: none;
+  border: 1px solid rgba(96,165,250,0.6);
+}
+
+/* start button */
+#startBtn {
+  padding: 10px;
+  border-radius: 10px;
+}
+
+/* =========================
+   SKIP BUTTON
+========================= */
+
+#skipBtn {
+  position: absolute;
+  top: 10px;
+  right: 10px;
+
+  background: #ff4d4d;
+  color: white;
+
+  padding: 8px 12px;
+  border-radius: 10px;
+
+  display: none;
+}
+
+/* =========================
+   TOAST SYSTEM (BOTTOM RIGHT)
+========================= */
+
+#toastContainer {
+  position: fixed;
+  bottom: 20px;
+  right: 20px;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  z-index: 9999;
+
+  align-items: flex-end;
+}
+
+/* individual toast */
+.toast {
+  background: rgba(20, 20, 25, 0.95);
+  color: white;
+
+  padding: 14px 16px;
+  border-radius: 12px;
+
+  font-size: 15px;
+  font-weight: 600;
+
+  min-width: 180px;
+  max-width: 260px;
+
+  box-shadow: 0 12px 35px rgba(0,0,0,0.45);
+
+  animation: toastIn 0.25s ease, toastOut 0.25s ease 2.7s forwards;
+}
+
+/* entry animation */
+@keyframes toastIn {
+  from {
+    opacity: 0;
+    transform: translateY(10px) scale(0.98);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}
+
+/* exit animation */
+@keyframes toastOut {
+  to {
+    opacity: 0;
+    transform: translateY(10px) scale(0.98);
+  }
+}
+
+/* =========================
+   LOBBY OVERLAY
+========================= */
+
+#lobby {
+  position: fixed;
+  inset: 0;
+  background: rgba(0,0,0,0.75);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 10000;
+}
+
+.lobbyBox {
+  background: #1c1f2a;
+  padding: 30px;
+  border-radius: 14px;
+  text-align: center;
+  width: 280px;
+}
+
+.lobbyBox input {
+  width: 100%;
+  padding: 10px;
+  margin-top: 10px;
+  border-radius: 8px;
+  border: none;
+  outline: none;
+}
+
+.lobbyBox button {
+  margin-top: 10px;
+  width: 100%;
+  padding: 10px;
+  border-radius: 8px;
+  background: #4ade80;
+  border: none;
+  cursor: pointer;
+}
+
+.quickColors {
+  display: flex;
+  gap: 6px;
+  align-items: center;
+
+  flex-wrap: wrap;     /* IMPORTANT */
+  max-width: 120px;    /* prevents overflow in Discord */
+}
+
+.colorSwatch {
+  width: 18px;
+  height: 18px;
+  border-radius: 4px;
+  cursor: pointer;
+  border: 2px solid rgba(255,255,255,0.2);
+  transition: transform 0.1s ease;
+}
+
+.colorSwatch:hover {
+  transform: scale(1.2);
+}
+
+.canvasWrap {
+  overflow: visible;
+}
