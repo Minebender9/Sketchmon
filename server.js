@@ -97,10 +97,10 @@ async function startNewPokemon(drawerId) {
 
   // Delay to ensure client is ready
   setTimeout(() => {
-    io.to(drawerId).emit("choosePokemon", details);
-    io.to(drawerId).emit("yourTurn");
-    console.log("Emitted choosePokemon to", drawerId);
-  }, 500);
+    io.emit("choosePokemon", details);
+    io.emit("yourTurn");
+    console.log("Emitted choosePokemon to all, intended for", drawerId);
+  }, 1000);
 
   // guessers clear visual state
   io.emit("clearCanvas");

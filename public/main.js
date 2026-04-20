@@ -70,6 +70,8 @@ function setRole(text, type = "") {
 /* ---------------- CHOOSE POKEMON ---------------- */
 
 socket.on("choosePokemon", (options) => {
+  if (!isDrawer) return;
+
   const overlay = document.getElementById("choosePokemon");
   const optionsDiv = document.getElementById("pokemonOptions");
 
@@ -220,6 +222,7 @@ socket.on("clearCanvas", () => {
 });
 
 socket.on("yourTurn", () => {
+  if (!isDrawer) return;
   showToast("Choose a Pokémon to draw!");
 });
 
