@@ -1,3 +1,5 @@
+console.log("Main file loaded")
+
 function showToast(message) {
   const container = document.getElementById("toastContainer");
 
