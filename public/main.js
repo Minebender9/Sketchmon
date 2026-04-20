@@ -67,6 +67,39 @@ function setRole(text, type = "") {
   role.className = type;
 }
 
+/* ---------------- CHOOSE POKEMON ---------------- */
+
+socket.on("choosePokemon", (options) => {
+  const overlay = document.getElementById("choosePokemon");
+  const optionsDiv = document.getElementById("pokemonOptions");
+
+  optionsDiv.innerHTML = "";
+
+  options.forEach(option => {
+    const div = document.createElement("div");
+    div.className = "pokemonOption";
+
+    const img = document.createElement("img");
+    img.src = option.image;
+    img.alt = option.name;
+
+    const p = document.createElement("p");
+    p.innerText = option.name.charAt(0).toUpperCase() + option.name.slice(1);
+
+    div.appendChild(img);
+    div.appendChild(p);
+
+    div.onclick = () => {
+      socket.emit("selectPokemon", option.name);
+      overlay.style.display = "none";
+    };
+
+    optionsDiv.appendChild(div);
+  });
+
+  overlay.style.display = "flex";
+});
+
 /* ---------------- DRAWING ---------------- */
 
 colorPicker.oninput = (e) => {
@@ -230,9 +263,12 @@ socket.on("roundEnd", () => {
 });
 
 /* CORRECT GUESS */
-socket.on("correctGuess", ({ playerId }) => {
+socket.on("correctGuess", ({ playerId, name, pokemon }) => {
   console.log("Correct guess by:", playerId);
-    showToast("🎉 Correct Guess!");
+  showToast(`🎉 ${name} guessed ${pokemon}!`);
+
+  // Reveal the Pokémon to everyone
+  document.getElementById("pokemon").innerText = pokemon;
 
   // DO NOT overwrite role text (fixes your bug)
   // instead just flash effect

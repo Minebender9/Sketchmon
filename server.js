@@ -1,4 +1,4 @@
-console.log("Test 123")
+
 
 import express from "express";
 import http from "http";
@@ -27,7 +27,8 @@ let game = {
   roundTimeLeft: 120,
   roundTimer: null,
 
-  started: false
+  started: false,
+  waitingForChoice: false
 };
 
 async function getPokemonNames() {
@@ -43,6 +44,39 @@ async function getPokemonNames() {
 }
 
 const pokemonList = await getPokemonNames();
+
+/* ---------------- HELPERS ---------------- */
+
+function getRandomPokemons(count) {
+  const selected = [];
+  const used = new Set();
+  while (selected.length < count) {
+    const index = Math.floor(Math.random() * pokemonList.length);
+    const name = pokemonList[index];
+    if (!used.has(name)) {
+      used.add(name);
+      selected.push(name);
+    }
+  }
+  return selected;
+}
+
+async function getPokemonDetails(names) {
+  const details = [];
+  for (const name of names) {
+    const response = await fetch(`https://pokeapi.co/api/v2/pokemon/${name}`);
+    const data = await response.json();
+    details.push({
+      name: data.name,
+      image: data.sprites.front_default
+    });
+  }
+  return details;
+}
+
+function getRandomPokemon() {
+  return pokemonList[Math.floor(Math.random() * pokemonList.length)];
+}
 
 /* ---------------- OAUTH ---------------- */
 
@@ -82,11 +116,13 @@ function emitScoreboard() {
 
 /* ---------------- POKEMON SYSTEM ---------------- */
 
-function startNewPokemon(drawerId) {
-  game.currentPokemon = getRandomPokemon();
+async function startNewPokemon(drawerId) {
+  const candidates = getRandomPokemons(3);
+  const details = await getPokemonDetails(candidates);
 
-  // ONLY drawer sees answer
-  io.to(drawerId).emit("yourPokemon", game.currentPokemon);
+  game.waitingForChoice = true;
+
+  io.to(drawerId).emit("choosePokemon", details);
 
   // guessers clear visual state
   io.emit("clearCanvas");
@@ -101,25 +137,11 @@ function startRound() {
 
   const drawerId = game.order[game.currentDrawerIndex];
 
-  game.roundTimeLeft = 120;
   game.currentPokemon = null;
 
   io.emit("roundStart", { drawer: drawerId });
-  io.to(drawerId).emit("yourTurn");
-
-  clearInterval(game.roundTimer);
 
   startNewPokemon(drawerId);
-
-  game.roundTimer = setInterval(() => {
-    game.roundTimeLeft--;
-
-    io.emit("timer", game.roundTimeLeft);
-
-    if (game.roundTimeLeft <= 0) {
-      endRound();
-    }
-  }, 1000);
 }
 
 function endRound() {
@@ -211,6 +233,32 @@ io.on("connection", (socket) => {
         startNewPokemon(drawerId);
       }, 300);
     }
+  });
+
+  /* ---------------- SELECT POKEMON ---------------- */
+  socket.on("selectPokemon", (chosenName) => {
+    const drawerId = game.order[game.currentDrawerIndex];
+
+    if (socket.id !== drawerId || !game.waitingForChoice) return;
+
+    game.currentPokemon = chosenName;
+    game.waitingForChoice = false;
+
+    // Start the timer now
+    game.roundTimeLeft = 120;
+    clearInterval(game.roundTimer);
+    game.roundTimer = setInterval(() => {
+      game.roundTimeLeft--;
+
+      io.emit("timer", game.roundTimeLeft);
+
+      if (game.roundTimeLeft <= 0) {
+        endRound();
+      }
+    }, 1000);
+
+    // Show to drawer
+    io.to(drawerId).emit("yourPokemon", game.currentPokemon);
   });
 
   /* ---------------- DISCONNECT ---------------- */
