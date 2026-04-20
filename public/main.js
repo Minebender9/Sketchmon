@@ -141,22 +141,6 @@ socket.on("choosePokemon", (options) => {
       text-align: center !important;
     `;
 
-    if (option.image) {
-      const img = document.createElement("img");
-      img.src = option.image;
-      img.alt = option.name;
-      img.style.cssText = `
-        width: 80px !important;
-        height: 80px !important;
-        display: block !important;
-        margin: 0 auto 5px !important;
-      `;
-      img.onerror = () => {
-        img.style.display = "none";
-      };
-      div.appendChild(img);
-    }
-
     const p = document.createElement("p");
     p.innerText = option.name.charAt(0).toUpperCase() + option.name.slice(1);
     p.style.cssText = `
@@ -176,8 +160,8 @@ socket.on("choosePokemon", (options) => {
   });
 
   setTimeout(() => {
-    overlay.style.display = "flex !important";
-    console.log("Overlay displayed");
+  overlay.style.display = "flex !important";
+  console.log("Overlay displayed");
   }, 500);
 });
 
