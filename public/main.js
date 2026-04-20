@@ -75,94 +75,61 @@ socket.on("choosePokemon", (options) => {
   console.log("choosePokemon event received", options);
   showToast("Choose a Pokémon to draw!");
 
-  // Create overlay dynamically for better compatibility
-  let overlay = document.getElementById("choosePokemon");
-  if (!overlay) {
-    overlay = document.createElement("div");
-    overlay.id = "choosePokemon";
-    overlay.style.cssText = `
-      position: absolute !important;
-      top: 0 !important;
-      left: 0 !important;
-      right: 0 !important;
-      bottom: 0 !important;
-      width: 100% !important;
-      height: 100% !important;
-      background: rgba(0, 0, 0, 0.95) !important;
-      display: none !important;
-      align-items: center !important;
-      justify-content: center !important;
-      z-index: 999999999 !important;
-      pointer-events: auto !important;
-    `;
+  const canvas = document.getElementById("canvas");
+  canvas.style.display = "none";
 
-    const chooseBox = document.createElement("div");
-    chooseBox.style.cssText = `
-      background: #1c1f2a !important;
-      padding: 30px !important;
-      border-radius: 14px !important;
-      text-align: center !important;
-      width: 400px !important;
-      border: 2px solid white !important;
-      max-width: 90% !important;
-    `;
-
-    const h1 = document.createElement("h1");
-    h1.innerText = "Choose a Pokémon to draw!";
-    chooseBox.appendChild(h1);
-
-    const optionsDiv = document.createElement("div");
-    optionsDiv.id = "pokemonOptions";
-    optionsDiv.style.cssText = `
-      display: flex !important;
-      justify-content: space-around !important;
-      gap: 10px !important;
-      flex-wrap: wrap !important;
-    `;
-    chooseBox.appendChild(optionsDiv);
-
-    overlay.appendChild(chooseBox);
-    document.getElementById("gameLayout").appendChild(overlay);
-  }
-
-  const optionsDiv = document.getElementById("pokemonOptions");
-  optionsDiv.innerHTML = "";
+  const optionsDiv = document.createElement("div");
+  optionsDiv.id = "tempOptions";
+  optionsDiv.style.cssText = `
+    display: flex;
+    justify-content: space-around;
+    align-items: center;
+    height: 75vh;
+    flex-wrap: wrap;
+    background: white;
+    border-radius: 14px;
+    box-shadow: 0 20px 80px rgba(0,0,0,0.6);
+  `;
 
   options.forEach(option => {
     const div = document.createElement("div");
     div.className = "pokemonOption";
     div.style.cssText = `
-      cursor: pointer !important;
-      border-radius: 10px !important;
-      padding: 10px !important;
-      background: rgba(255,255,255,0.1) !important;
-      transition: transform 0.2s !important;
-      min-width: 80px !important;
-      text-align: center !important;
+      cursor: pointer;
+      border-radius: 10px;
+      padding: 20px;
+      background: rgba(255,255,255,0.1);
+      transition: transform 0.2s;
+      min-width: 120px;
+      text-align: center;
+      margin: 10px;
+      border: 2px solid #ccc;
     `;
 
     const p = document.createElement("p");
     p.innerText = option.name.charAt(0).toUpperCase() + option.name.slice(1);
     p.style.cssText = `
-      margin: 5px 0 0 0 !important;
-      font-weight: bold !important;
-      font-size: 14px !important;
+      margin: 0;
+      font-weight: bold;
+      font-size: 18px;
+      color: black;
     `;
     div.appendChild(p);
+
+    div.onmouseover = () => div.style.transform = "scale(1.05)";
+    div.onmouseout = () => div.style.transform = "scale(1)";
 
     div.onclick = () => {
       console.log("Selecting Pokemon", option.name);
       socket.emit("selectPokemon", option.name);
-      overlay.classList.remove("show");
+      optionsDiv.remove();
+      canvas.style.display = "block";
     };
 
     optionsDiv.appendChild(div);
   });
 
-  setTimeout(() => {
-  overlay.classList.add("show");
-  console.log("Overlay displayed");
-  }, 500);
+  document.getElementById("canvasWrap").appendChild(optionsDiv);
 });
 
 /* ---------------- DRAWING ---------------- */
