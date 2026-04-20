@@ -73,6 +73,9 @@ socket.on("choosePokemon", (options) => {
   const overlay = document.getElementById("choosePokemon");
   const optionsDiv = document.getElementById("pokemonOptions");
 
+  console.log("choosePokemon event received", options);
+  showToast("Choose a Pokémon to draw!");
+
   optionsDiv.innerHTML = "";
 
   options.forEach(option => {
@@ -92,13 +95,14 @@ socket.on("choosePokemon", (options) => {
 
     div.onclick = () => {
       socket.emit("selectPokemon", option.name);
-      overlay.style.display = "none";
+      overlay.classList.remove("visible");
     };
 
     optionsDiv.appendChild(div);
   });
 
-  overlay.style.display = "flex";
+  overlay.classList.add("visible");
+  overlay.style.zIndex = "2147483647";
 });
 
 /* ---------------- DRAWING ---------------- */
