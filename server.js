@@ -64,12 +64,21 @@ function getRandomPokemons(count) {
 async function getPokemonDetails(names) {
   const details = [];
   for (const name of names) {
-    const response = await fetch(`https://pokeapi.co/api/v2/pokemon/${name}`);
-    const data = await response.json();
-    details.push({
-      name: data.name,
-      image: data.sprites.front_default
-    });
+    try {
+      const response = await fetch(`https://pokeapi.co/api/v2/pokemon/${name}`);
+      const data = await response.json();
+      details.push({
+        name: data.name,
+        image: data.sprites.front_default
+      });
+    } catch (err) {
+      console.error(`Failed to fetch details for ${name}:`, err);
+      // Fallback: use name without image
+      details.push({
+        name: name,
+        image: null
+      });
+    }
   }
   return details;
 }
@@ -102,8 +111,10 @@ function startRound() {
   const drawerId = game.order[game.currentDrawerIndex];
 
   game.currentPokemon = null;
+  game.roundTimeLeft = 120;
 
   io.emit("roundStart", { drawer: drawerId });
+  io.emit("timer", game.roundTimeLeft);
 
   startNewPokemon(drawerId);
 }
@@ -209,7 +220,6 @@ io.on("connection", (socket) => {
     game.waitingForChoice = false;
 
     // Start the timer now
-    game.roundTimeLeft = 120;
     clearInterval(game.roundTimer);
     game.roundTimer = setInterval(() => {
       game.roundTimeLeft--;

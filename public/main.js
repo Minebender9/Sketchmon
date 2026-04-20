@@ -79,14 +79,15 @@ socket.on("choosePokemon", (options) => {
     const div = document.createElement("div");
     div.className = "pokemonOption";
 
-    const img = document.createElement("img");
-    img.src = option.image;
-    img.alt = option.name;
+    if (option.image) {
+      const img = document.createElement("img");
+      img.src = option.image;
+      img.alt = option.name;
+      div.appendChild(img);
+    }
 
     const p = document.createElement("p");
     p.innerText = option.name.charAt(0).toUpperCase() + option.name.slice(1);
-
-    div.appendChild(img);
     div.appendChild(p);
 
     div.onclick = () => {
