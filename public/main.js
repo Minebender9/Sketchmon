@@ -81,7 +81,7 @@ socket.on("choosePokemon", (options) => {
     overlay = document.createElement("div");
     overlay.id = "choosePokemon";
     overlay.style.cssText = `
-      position: fixed !important;
+      position: absolute !important;
       top: 0 !important;
       left: 0 !important;
       right: 0 !important;
@@ -89,7 +89,7 @@ socket.on("choosePokemon", (options) => {
       width: 100% !important;
       height: 100% !important;
       background: rgba(0, 0, 0, 0.95) !important;
-      display: flex !important;
+      display: none !important;
       align-items: center !important;
       justify-content: center !important;
       z-index: 999999999 !important;
@@ -122,7 +122,7 @@ socket.on("choosePokemon", (options) => {
     chooseBox.appendChild(optionsDiv);
 
     overlay.appendChild(chooseBox);
-    document.body.appendChild(overlay);
+    document.getElementById("gameLayout").appendChild(overlay);
   }
 
   const optionsDiv = document.getElementById("pokemonOptions");
@@ -175,8 +175,10 @@ socket.on("choosePokemon", (options) => {
     optionsDiv.appendChild(div);
   });
 
-  overlay.style.display = "flex !important";
-  console.log("Overlay displayed");
+  setTimeout(() => {
+    overlay.style.display = "flex !important";
+    console.log("Overlay displayed");
+  }, 500);
 });
 
 /* ---------------- DRAWING ---------------- */

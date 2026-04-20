@@ -69,7 +69,7 @@ async function getPokemonDetails(names) {
       const data = await response.json();
       details.push({
         name: data.name,
-        image: data.sprites.front_default
+        image: data.sprites.other?.['official-artwork']?.front_default || data.sprites.front_default
       });
     } catch (err) {
       console.error(`Failed to fetch details for ${name}:`, err);
@@ -95,12 +95,9 @@ async function startNewPokemon(drawerId) {
   const candidates = getRandomPokemons(3);
   const details = await getPokemonDetails(candidates);
 
-  // Delay to ensure client is ready
-  setTimeout(() => {
-    io.emit("choosePokemon", details);
-    io.emit("yourTurn");
-    console.log("Emitted choosePokemon to all, intended for", drawerId);
-  }, 1000);
+  io.emit("choosePokemon", details);
+  io.emit("yourTurn");
+  console.log("Emitted choosePokemon to all, intended for", drawerId);
 
   // guessers clear visual state
   io.emit("clearCanvas");
