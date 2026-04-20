@@ -95,8 +95,12 @@ async function startNewPokemon(drawerId) {
   const candidates = getRandomPokemons(3);
   const details = await getPokemonDetails(candidates);
 
-  io.to(drawerId).emit("choosePokemon", details);
-  io.to(drawerId).emit("yourTurn");
+  // Delay to ensure client is ready
+  setTimeout(() => {
+    io.to(drawerId).emit("choosePokemon", details);
+    io.to(drawerId).emit("yourTurn");
+    console.log("Emitted choosePokemon to", drawerId);
+  }, 500);
 
   // guessers clear visual state
   io.emit("clearCanvas");

@@ -227,6 +227,7 @@ socket.on("yourTurn", () => {
 
 /* ROUND START = SINGLE SOURCE OF TRUTH FOR ROLE UI */
 socket.on("roundStart", ({ drawer }) => {
+  console.log("roundStart received, drawer:", drawer, "my id:", socket.id);
   isDrawer = socket.id === drawer;
 
   ctx.clearRect(0, 0, canvas.width, canvas.height);
