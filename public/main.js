@@ -387,13 +387,15 @@ socket.on("correctGuess", ({ playerId, name, pokemon }) => {
   const pokemonName = capitalizePokemon(pokemon);
   showToast(`🎉 ${name} guessed ${pokemonName}!`);
 
-  // Reveal the Pokémon to everyone
-  document.getElementById("pokemon").innerText = pokemonName;
+  // Reveal the Pokémon to everyone except the drawer (who already knows it)
+  if (!isDrawer) {
+    document.getElementById("pokemon").innerText = pokemonName;
 
-  // Clear after 3 seconds
-  setTimeout(() => {
-    document.getElementById("pokemon").innerText = "";
-  }, 3000);
+    // Clear after 3 seconds for guessers
+    setTimeout(() => {
+      document.getElementById("pokemon").innerText = "";
+    }, 3000);
+  }
 
   // DO NOT overwrite role text (fixes your bug)
   // instead just flash effect
