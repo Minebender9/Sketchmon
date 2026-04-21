@@ -362,12 +362,16 @@ socket.on("timer", (t) => {
 /* REVEAL POKEMON */
 socket.on("revealPokemon", (name) => {
   const pokemonName = capitalizePokemon(name);
-  document.getElementById("pokemon").innerText = pokemonName;
-  showToast(`Time's up! The Pokémon was ${pokemonName}`);
+  
+  // Only show to guessers (drawer already knows or should keep seeing it)
+  if (!isDrawer) {
+    document.getElementById("pokemon").innerText = pokemonName;
+    showToast(`Time's up! The Pokémon was ${pokemonName}`);
 
-  setTimeout(() => {
-    document.getElementById("pokemon").innerText = "";
-  }, 3000);
+    setTimeout(() => {
+      document.getElementById("pokemon").innerText = "";
+    }, 3000);
+  }
 });
 
 /* ROUND END */
